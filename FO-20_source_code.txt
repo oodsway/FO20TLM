@@ -1,0 +1,411 @@
+AUTHOR:     Woods Wannamaker
+DATE:       2017-05-25
+
+NOTES:      Converted from pdf of *scanned pages* of original source print from MS QuickBasic for Mac
+            created on 1993-04-14 using the web site: http://www.ocrconvert.com/
+            
+            Empty lines removed with
+            $ cat FO-20\ TLM\ Program.txt |egrep -v '^$' > FO-20_source_code.txt
+            
+            Followed by extensive error correcting.
+
+            May contain errors! Compare with PDF file of original scanned source.
+--------------------------------------------------------------------------------------------
+
+    Microsoft QuickBASIC Listing                            04/14/93                Page 1
+    
+            Source File: MF 0.2.4
+
+        Program Unit: MAIN              Entry: 000006B4
+
+00001 REM MF v 0.2.4
+00002 REM Improved IF...THEN blocks and variables
+00003 REM April 14,1993
+00004
+00005 DIM N(65):DIM T$(30):DIM B(26):DIM C(26):DIM label$(65):DIM label2$(26)
+00006 
+00007 FOR l%= 0 TO 65
+00008 IF l%<=26 THEN READ label$(l%),B(l%),C(l%) ELSE READ label$(l%)
+00009 NEXT l%
+00010
+00011 DATA "Total Solar Array Current= ",1.91,-7.64
+00012 DATA "Battery charge/discharge= ",-3.81,1935.48
+00013 DATA "Battery voltage= ",.022,0
+00014 DATA "Battery center voltage= ",.009961,0
+00015 DATA "Bus voltage= ",.02021,0
+00016 DATA "+5 V regulator voltage= ",.0062,0
+00017 DATA "-5 V regulator voltage= ",-.0062,0
+00018 DATA "+10 V regulator voltage= ",.0126,0
+00019 DATA "JTA output power= ",5.1,-805.8
+00020 DATA "JTD output power= ",5.4,-626.4
+00021 DATA "Calibration voltage #2= ",.002,0
+00022 DATA "Offset voltage #1= ",.002,0
+00023 DATA "Battery Temperature= ",-.139,92.991
+00024 DATA "JTD Temperature= ",-.139,92.991
+00025 DATA "Baseplate #1 Temperature= ",-.139,92.991
+00026 DATA "Baseplate #2 Temperature= ",-.139,92.991
+00027 DATA "Baseplate #3 Temperature= ",-.139,92.991
+00028 DATA "Baseplate #4 Temperature= ",-.139,92.991
+00029 DATA "Calibration Temperature #1= ",.002,0
+00030 DATA "Offset Voltage #2= ",.002,0
+00031 DATA "Solar Panel #1 Temperature= ",.38,-260.3
+00032 DATA "Solar Panel #2 Temperature= ",.38,-244.34
+00033 DATA "solar Panel #3 Temperature= ",.38,-245.48
+00034 DATA "Solar Panel #4 Temperature= ",.38,-245.86
+00035 DATA "",0,0
+00036 DATA "Calibration Temperature #2= ",.002,0
+00037 DATA "Calibration Temperature #3= ",.002,0
+00038 DATA "Spares (TED) channel 27a= "
+00039 DATA "Spares (TBD) channel 27b= "
+00040 DATA "Spares (TBD) channel 27c= "
+00041 DATA "Spares (TBD) channel 28a= "
+00042 DATA "Spares (TBD) channel 28b= "
+00043 DATA "Errors Memory Unit #0= "
+00044 DATA "Errors Memory Unit #1= "
+00045 DATA "Errors Memory Unit #2= "
+00046 DATA "Errors Memory Unit #3= "
+00047 DATA "JTA Power is "
+00048 DATA "JTD Power is "
+00049 DATA "JTA Beacon is "
+00050 DATA "UVC status is "
+00051 DATA "UVC level is "
+00052 DATA "Main Relay is ",""
+00053 DATA "Battery Status is "
+00054 DATA "Battery Logic is ",""
+00055 DATA "PCU Status is "
+ 
+    Microsoft QuickBASIC Listing                            04/14/93                Page 2
+    
+            Source File: MF 0.2.4
+            
+00056 DATA "PCU Status is "
+00057 DATA "Memory Unit#0 is "
+00058 DATA "Memory Unit#1 is "
+00059 DATA "Memory Unit#2 is "
+00060 DATA "Memory Unit#3 is "
+00061 DATA "Memory Select "
+00062 DATA "Memory Select ","",""
+00063 DATA "Computer Power is ",""
+00064 DATA "Solar Pannel #1 is "
+00065 DATA "Solar Pannel #2 is "
+00066 DATA "Solar Pannel #3 is "
+00067 DATA "Solar Pannel #4 is "
+00068 DATA "Solar Pannel #5 is ",""
+00069 DATA "CW Beacon Source is ",""
+00070
+00071 label2$(0)=" mA":label2$(1)=" mA"
+00072 FOR l%=2 TO 26
+00073 IF l%<=11 THEN label2$(l%)= ” volts"
+00074 IF l%>11 THEN label2$(l%)= " °C"
+00075 NEXT l%
+00076 label2$(8)=" mW":label2$(9)=" mW":label2$(19)=" volts"
+00077
+00078 test$="BEACON:"
+00079 test2$="RA"
+00080 test3$="M0"
+00081
+00082 start:
+00083  TEXTFONT(3)
+00084  TEXTSIZE(10)
+00085
+00086 menuID=0
+00087 menuITEM=0
+00088 MENU 1,0,1,"File"
+00089 MENU 1,1,1,"Captured PSK TLM":cmdkey 1,1,"D"
+00090 MENU 1,2,1,"Monitored PSK TLM":cmdkey 1,2,"M"
+00091 MENU 1,3,1,"Quit":cmdkey 1,3,"Q"
+00092
+00093 ON MENU GOSUB menucheck:
+00094 MENU ON
+00095
+00096 idle:
+00097 GOTO idle:
+00098
+00099 menucheck:
+00100 menuID=MENU(0)
+00101 menuITEM=MENU(1)
+00102
+00103 HandleMenu:
+00104 SELECT CASE menuID
+00105 CASE 1
+00106 SELECT CASE menuITEM
+00107 CASE 1 ‘
+00108   f1$=FILES$(1,"TEXT")
+00109   f2$=f1$+".Decoded"
+00110   f3$=f1$+".Temp"
+00111 IF f1$="" THEN GOTO start:
+00112 CASE 2
+00113 PRINT "This function not yet available...Click once to restart."
+ 
+    Microsoft QuickBASIC Listing                            04/14/93                Page 3
+    
+            Source File: MF 0.2.4          
+ 
+00114 WHILE MOUSE(0)<>1:WEND:CLS:GOTO start:
+00115 CASE 3: CLS:END
+00116 END SELECT
+00117 END SELECT
+00118
+00119 NoNo1:
+00120 INPUT;"Decode All-[1], One-[2] or Range-[3]";how%
+00121 SELECT CASE how%
+00122 CASE 1
+00123   lim1%=0:lim2%=65:CLS
+00124 CASE 2:
+00125   CLS
+00126   NoNo2:
+00127   INPUT;"Channel Number"; lim1%
+00128   IF lim1%<0 OR lim1% >65 THEN CLS:GOTO NoNo2:
+00129   lim2%=lim1%
+00130   CLS
+00131 CASE 3
+00132   NoNo3:
+00133   CLS
+00134   INPUT;"Lower,Upper (i.e. 5,10)"; lim1%,lim2%
+00135   IF lim1%<0 OR lim1% >65 OR lim2% <0 OR lim2% > 65 THEN CLS:GOTO NoNo3:
+00136   CLS
+00137 CASE ELSE
+00138   CLS:GOTO NoNo1:
+00139 END SELECT
+00140
+00141 OPEN f1$ FOR INPUT AS #1
+00142 OPEN f2$ FOR OUTPUT AS #2
+00143 OPEN f3$ FOR OUTPUT AS #3
+00144 CLOSE #3
+00145 OPEN f3$ AS #3 LEN= 132
+00146 FIELD #3, 132 AS frame$
+00147
+00148 fc%=0
+00149 WHILE NOT EOF(1)
+00150 READEM:
+00151 LINE INPUT#1,stream$
+00152 IF INSTR(1,stream$,test$) >0 THEN
+00153 LINE INPUT#1, stream2$
+00154 IF INSTR(1,stream2$,test2$) >0 THEN
+00155 PRINT stream$:PRINT #2, stream$
+00156 PRINT stream2$:PRINT #2,stream2$
+00157
+00158 nums$=""
+00159 fc%=fc%+1
+00160 FOR l% = 0 TO 65
+00161 IF l%<=26 THEN
+00162   INPUT #1, N(l%)
+00163   nums$=nums$+MKI$(N(l%))
+00164 ELSEIF l%>26 THEN
+00165   x$=INPUT$(1,1)
+00166   IF ASC(x$)=32 OR ASC(x$)=13 THEN x$=INPUT$(1,1)
+00167   IF ASC(x$)-48 >=0 AND ASC(x$)-48 <=9 THEN
+00168       N(l%)=ASC(x$)-48
+00169       nums$=nums$+MKI$(N(l%))
+00170   END IF
+00171   IF ASC(x$)>=65 AND ASC(x$)<=70 THEN
+
+    Microsoft QuickBASIC Listing                            04/14/93                Page 4
+    
+            Source File: MF 0.2.4   
+ 
+00172       N(l%)=ASC(x$)-55
+00173       nums$=nums$+MKI$(N(l%))
+00174   END IF
+00175 END IF
+00176 NEXT l%
+00177   LSET frame$=nums$
+00178   PUT#3,fc%
+00179   PRINT:PRINT#2,
+00180   CALL PSK (fc%,B(),C(),N(),lim1%,lim2%,frame$,label$(),label2$(),T$())
+00181 END IF
+00182 IF INSTR(1,stream2$,test3$)>0 THEN GOTO READEM:
+00183 END IF
+00184 WEND
+00185
+00186 finish:
+00187 PRINT "Decoded" fc%" Telemetry Frames."
+00188 PRINT #2, "Decoded" fc%" Telemetry Frames."
+00189 PRINT:
+00190 NoNo4:
+00191 INPUT; "Decode Another-[1] or End-[2]";stoporgo%
+00192 SELECT CASE stoporgo%
+00193 CASE 1
+00194   CLS:RESET:GOTO start:
+00195 CASE 2
+00196   CLS:RESET:KILL f3$
+00197 END
+00198 CASE ELSE :CLS:GOTO NoNo4:
+00199 END SELECT
+00200
+00201
+
+    Microsoft QuickBASIC Listing                            04/14/93                Page 5
+    
+            Source File: MF 0.2.4  
+            
+            
+        Symbol and Label Tables for: MAIN
+        
+SYMBOL                              TYPE                STORAGE                     ADDRESS
+
+N!()                                SINGLE              LOCAL                       0000006C
+T$()                                STRING              LOCAL                       0000018E
+B!()                                SINGLE              LOCAL                       00000262
+C!()                                SINGLE              LOCAL                       000002E8
+LABEL$()                            STRING              LOCAL                       0000036E
+LABEL2$()                           STRING              LOCAL                       00000514
+L%                                  INTEGER             LOCAL                       000005D4
+TEST$                               STRING              LOCAL                       0000002A
+TEST2$                              STRING              LOCAL                       00000030
+TEST3$                              STRING              LOCAL                       00000036
+MENUID!                             SINGLE              LOCAL                       000005D6
+MENUITEM!                           SINGLE              LOCAL                       000005DA
+F1$                                 STRING              LOCAL                       0000003C
+F2$                                 STRING              LOCAL                       00000042
+F3$                                 STRING              LOCAL                       00000048
+HOW%                                INTEGER             LOCAL                       000005DE
+LIM1%                               INTEGER             LOCAL                       000005E0
+LIM2%                               INTEGER             LOCAL                       000005E2
+FRAME$                              STRING              LOCAL                       0000004E
+FC%                                 INTEGER             LOCAL                       000005E4
+STREAM$                             STRING              LOCAL                       00000054
+STREAM2$                            STRING              LOCAL                       0000005A
+NUMS$                               STRING              LOCAL                       00000060
+X$                                  STRING              LOCAL                       00000066
+STOPORGO%                           INTEGER             LOCAL                       000005E6
+
+
+        STORAGE             MEMORY
+
+        LOCAL               1516
+
+LABEL                       ADDRESS     LABEL                       ADDRESS
+
+START                       00000B04    MENUCHECK                   00000DD8
+IDLE                        00000DCE    HANDLEMENU                  00000EOC
+NONO1                       000010A0    NONO2                       000011AA
+NONO3                       00001276    READEM                      000014F2
+FINISH                      00001B3E    NONO4                       00001C90
+    
+    
+    Microsoft QuickBASIC Listing                            04/14/93                Page 6
+    
+            Source File: MF 0.2.4  
+            
+            
+
+        Program Unit: PSK               Entry: 00001DFA
+ 
+ 
+00202 SUB PSK (fc%,B(),C(),N(),lim1%,lim2%,frame$,label$(),label2$(),T$()) STATIC
+00203 GET#3,fc%
+00204 FIELD #3, 132 AS frame$
+00205 l%=0
+00206 FOR z%=1 TO 132 STEP 2
+00207   x$=MID$(frame$,z%,2)
+00208   N(l%)=CVI(x$)
+00209   l%=l%+1
+00210 NEXT z%
+00211
+00212 errorsum%=0
+00213 sparesum%=0
+00214 FOR l%=27 TO 35
+00215 IF l%<=31 THEN sparesum%=sparesum%+N(l%) ELSE errorsum%=errorsum%+N(l%)
+00216 NEXT l%
+00217
+00218 FOR l%=36 TO 56
+00219 IF N(l%)=1 THEN T$(l%-36)="ON" ELSE T$(l%-36)="OFF"
+00220 NEXT l%
+00221
+00222 FOR l%=lim1% TO lim2%
+00223 IF l%<=26 THEN
+00224   N(l%)= B(l%)*N(l%)+C(l%)
+00225 ELSEIF l%=38 THEN
+00226   IF N(l%)=1 THEN T$(l%-36)="PSK" ELSE T$(l%-36)="CW"
+00227 ELSEIF l%=40 THEN
+00228   IF N(l%)=1 THEN T$(l%-36)="1" ELSE T$(l%-36)="2"
+00229 ELSEIF l%=43 OR l%=44 THEN
+00230   IF N(l%)=1 THEN T$(l%-36)="TRIC" ELSE T$(l%-36)="FULL"
+00231 ELSEIF l%=46 OR l%=52 THEN
+00232   IF N(l%)=1 THEN T$(l%-36)="BIT1" ELSE T$(l%-36)="LSB"
+00233 ELSEIF l%=47 OR l%=53 THEN
+00234   IF N(l%)=1 THEN T$(l%-36)="BIT2" ELSE T$(l%-36)="MSB"
+00235 ELSEIF l%=58 OR l%=59 OR l%=60 OR l%=61 OR l%=62 THEN
+00236   IF N(l%)=1 THEN T$(l%-36)="Lit" ELSE T$(l%-36)="Dark"
+00237 ELSEIF l%=64 THEN
+00238   IF N(l%)=l THEN T$(l%-36)="CPU" ELSE T$(l%-36)="TLM"
+00239 END IF
+00240 NEXT l%
+00241
+00242 FOR l%=lim1% TO lim2%
+00243 IF l%<=26 THEN
+00244   IF l%=24 THEN l%= %+1
+00245   PRINT label$(l%);USING "####,.# ";N(l%);:PRINT label2$(l%)
+00246   PRINT #2,label$(l%);USING "####,.# ";N(l%);:PRINT #2,
+00247 ELSEIF (l%>26) AND (l%<=35) THEN
+00248   IF l%=27 THEN PRINT:PRINT #2,
+00249   PRINT label$(l%);N(l%)
+00250   PRINT #2,label$(l%);N(l%)
+00251    IF l%=31 THEN
+00252     PRINT "Total spares= "sparesum%:PRINT
+00253     PRINT #2,"Total spares= "sparesum%:PRINT#2,
+00254   ELSEIF l%=35 THEN
+00255     PRINT "Total errors= "errorsum%:PRINT
+00256     PRINT #2, "Total errors= "errorsum%:PRINT #2,
+
+
+    Microsoft QuickBASIC Listing                            04/14/93                Page 7
+    
+            Source File: MF 0.2.4  
+
+
+00257   END IF
+00258 ELSEIF (l%>=36) AND (l%<>42) AND (l%<>45) AND (l%<>54) AND (l%<>55) AND
+(l%<>57) AND (l%<>63) AND (l%<>65) THEN
+00259    PRINT label$(l%);T$(l%-36)
+00260    PRINT #2,label$(l%);T$(l%-36)
+00261 END IF
+00262 NEXT l%
+00263 PRINT:PRINT#2,
+00264 PRINT:PRINT#2,
+00265 END SUB
+
+ 
+    Microsoft QuickBASIC Listing                            04/14/93                Page 8
+    
+            Source File: MF 0.2.4
+            
+            
+
+        Symbol and Label Tables for: PSK
+        
+        
+SYMBOL                              TYPE                STORAGE                     ADDRESS       
+
+FC%                                 INTEGER             DUMMY
+B!()                                SINGLE              DUMMY
+C!()                                SINGLE              DUMMY
+N!()                                SINGLE              DUMMY
+LIM1%                               INTEGER             DUMMY
+LIM2%                               INTEGER             DUMMY
+FRAME$                              STRING              DUMMY
+LABEL$()                            STRING              DUMMY
+LABEL2$()                           STRING              DUMMY
+T$()                                STRING              DUMMY
+L%                                  INTEGER             LOCAL                       00000032
+Z%                                  INTEGER             LOCAL                       00000034
+X$                                  STRING              LOCAL                       0000002C
+ERRORSUM%                           INTEGER             LOCAL                       00000036
+SPARESUM%                           INTEGER             LOCAL                       00000038
+
+
+        STORAGE         MEMORY
+        
+        LOCAL               62
+
+ 
+ 
+ 
+    LABEL               ADDRESS                 LABEL                       ADDRESS
+    
+    
+    
+    ***** 0 errors
+ 
+ 
